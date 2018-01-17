@@ -1,19 +1,22 @@
 let cache = {};
-let clearCacheFlag = true;
 
 class MsntCachedCssLoader {
   constructor(params) {}
 
   apply(compiler) {
     compiler.plugin('invalid', (fileName, changeTime) => {
-      const temp = this;
-
-      // flag to prevent clear cache on first build
-      // this way extract-text-webpack-plugin won't recompile CSS files
-      clearCacheFlag = !clearCacheFlag;
-      if (!clearCacheFlag) return;
-
-      cache = {};
+      for (var i in cache) {
+        // remove cache for changed file
+        if (i === fileName) {
+          delete cache[i];
+          continue;
+        }
+        
+        // clear cache only for entry files
+        if (!i.includes('src\\css\\pages')) continue;
+        
+        delete cache[i];
+      }
     });
 
     compiler.plugin('this-compilation', compilation => {
