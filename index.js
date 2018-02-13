@@ -25,7 +25,7 @@ class MsntCachedCssLoader {
               fileDependencies = module.fileDependencies;
 
         // we are only interested in ".css" files
-        if (!resource.endsWith('.css')) return;
+        if (!resource || !resource.endsWith('.css')) return;
 
         const source = module._source.source();
 
